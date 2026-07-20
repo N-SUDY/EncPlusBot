@@ -1,0 +1,142 @@
+{
+    "name": "ENC-BOT",
+    "description": "Telegram Video Encoding Bot",
+    "repository": "https://github.com/TheMisfitDK/EncPlusBot",
+    "logo": "https://telegra.ph/file/c28cfdd42019a5a9cc11b.jpg",
+    "keywords": [
+        "telegram",
+        "bot",
+        "ffmpeg",
+        "encoder",
+        "ai"
+    ],
+    "addons": [
+        {
+            "plan": "mongolab:sandbox",
+            "as": "MONGODB"
+        }
+    ],
+    "env": {
+        "APP_ID": {
+            "description": "Your Telegram API ID (from my.telegram.org)",
+            "required": true
+        },
+        "API_HASH": {
+            "description": "Your Telegram API Hash (from my.telegram.org)",
+            "required": true
+        },
+        "BOT_TOKEN": {
+            "description": "Your Telegram Bot Token (from @BotFather)",
+            "required": true
+        },
+        "OWNER": {
+            "description": "Telegram user ID(s) of bot owner(s), space-separated",
+            "required": true
+        },
+        "DATABASE_URL": {
+            "description": "MongoDB URI (auto-filled by mLab addon, or supply your own Atlas URI)",
+            "required": false
+        },
+        "FFMPEG": {
+            "description": "Custom FFmpeg encode command. Use \"\"\"{}\"\"\" for input/output placeholders.",
+            "value": "ffmpeg -i \"\"\"{}\"\"\" -preset ultrafast -c:v libx265 -crf 27 -map 0:v -c:a aac -map 0:a -c:s copy -map 0:s? \"\"\"{}\"\"\"",
+            "required": false
+        },
+        "LOG_CHANNEL": {
+            "description": "Telegram channel/group ID for bot logs (bot must be admin)",
+            "required": false
+        },
+        "AI_ENABLED": {
+            "description": "Enable Claude AI features (True/False)",
+            "value": "False",
+            "required": false
+        },
+        "ANTHROPIC_API_KEY": {
+            "description": "Anthropic API key for Claude AI. Get at https://console.anthropic.com/",
+            "required": false
+        },
+        "AI_MODEL": {
+            "description": "Anthropic model to use for AI commands",
+            "value": "claude-sonnet-4-20250514",
+            "required": false
+        },
+        "AI_MAX_TOKENS": {
+            "description": "Max tokens per AI response",
+            "value": "1024",
+            "required": false
+        },
+        "AI_ALLOWED_ROLES": {
+            "description": "Who can use AI commands: owner, allowed, or all",
+            "value": "owner",
+            "required": false
+        },
+        "HEALTH_PORT": {
+            "description": "HTTP health-check port (set to $PORT on Heroku, or 0 to disable)",
+            "value": "0",
+            "required": false
+        },
+        "ENCODER": {
+            "description": "Encoder name/tag included in output captions",
+            "required": false
+        },
+        "THUMBNAIL": {
+            "description": "Telegraph link for default thumbnail image",
+            "required": false
+        },
+        "FCHANNEL": {
+            "description": "Channel ID where encoded videos are forwarded",
+            "required": false
+        },
+        "TEMP_USERS": {
+            "description": "Space-separated Telegram IDs of temporary allowed users",
+            "required": false
+        },
+        "ALWAYS_DEPLOY_LATEST": {
+            "description": "Pull latest code from upstream repo on every startup (True/False)",
+            "value": "False",
+            "required": false
+        },
+        "LOCK_ON_STARTUP": {
+            "description": "Start bot in paused state (True/False)",
+            "value": "False",
+            "required": false
+        },
+        "RSS_CHAT": {
+            "description": "Chat ID where RSS feed updates are sent",
+            "required": false
+        },
+        "RSS_DELAY": {
+            "description": "Interval in seconds between RSS feed checks",
+            "value": "60",
+            "required": false
+        },
+        "WORKERS": {
+            "description": "Number of Pyrogram event worker threads",
+            "value": "2",
+            "required": false
+        },
+        "AUTO_CLEAN_INTERVAL": {
+            "description": "Auto-clean temp dirs every N seconds (0 = disabled)",
+            "value": "0",
+            "required": false
+        }
+    },
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "standard-2x"
+        }
+    },
+    "buildpacks": [
+        {
+            "url": "https://github.com/heroku/heroku-buildpack-apt"
+        },
+        {
+            "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+        },
+        {
+            "url": "heroku/python"
+        }
+    ],
+    "stack": "heroku-26"
+}
